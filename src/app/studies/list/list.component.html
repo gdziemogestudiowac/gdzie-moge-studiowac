@@ -60,7 +60,7 @@
       >
         <p>{{ studiesByDivisions.division }}</p>
         <mat-list-item dense *ngFor="let studyfield of studiesByDivisions.studies">
-          <p>{{ studyfield.name }}</p>
+          <p>{{ studyfield.name }} ({{ studyfield.mode }})</p>
         </mat-list-item>
       </mat-list>
     </div>
