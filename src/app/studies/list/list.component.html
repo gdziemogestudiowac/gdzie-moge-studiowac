@@ -4,11 +4,11 @@
   *ngIf="superpowersEnabled"
 >
   <mat-form-field>
-    <input matInput placeholder="Nazwa uczelni..." formControlName="name" />
+    <input matInput placeholder="Nazwa uczelni" formControlName="name" />
   </mat-form-field>
   |
   <mat-form-field>
-    <input matInput placeholder="Typ uczelni..." formControlName="type" />
+    <input matInput placeholder="Typ uczelni" formControlName="type" />
   </mat-form-field>
 
   <button mat-fab color="primary" type="submit" [disabled]="!collegeForm.valid">
@@ -16,16 +16,58 @@
   </button>
 </form>
 
+<form
+  [formGroup]="studyFieldForm"
+  (ngSubmit)="onSubmitStudyField()"
+  *ngIf="superpowersEnabled"
+>
+  <mat-form-field>
+    <input matInput placeholder="Nazwa uczelni" formControlName="college" />
+  </mat-form-field>
+  |
+  <mat-form-field>
+    <input matInput placeholder="Nazwa kierunku" formControlName="name" />
+  </mat-form-field>
+  |
+  <mat-form-field>
+    <input matInput placeholder="Nazwa wydziału" formControlName="division" />
+  </mat-form-field>
+  |
+  <mat-form-field>
+    <input matInput placeholder="Tryb zajęć" formControlName="mode" />
+  </mat-form-field>
+
+  <button
+    mat-fab
+    color="primary"
+    type="submit"
+    [disabled]="!studyFieldForm.valid"
+  >
+    +
+  </button>
+</form>
+
 <div class="horizontal-groups">
   <mat-card *ngFor="let collegesGroup of collegesGroups$ | async">
-    <mat-card-header
-      ><h3>{{ collegesGroup.type }}</h3></mat-card-header
-    >
-    <mat-list dense>
-      <mat-list-item *ngFor="let college of collegesGroup.colleges">
-        {{ college.name }}
-      </mat-list-item>
-    </mat-list>
+    <mat-card-header>
+      <h3>{{ collegesGroup.type }}</h3>
+    </mat-card-header>
+
+    <mat-card *ngFor="let college of collegesGroup.colleges">
+      <mat-card-subtitle>
+        <h3>{{ college.name }}</h3>
+      </mat-card-subtitle>
+
+      <mat-card-content>
+        <mat-list dense *ngFor="let studiesByDivisions of college.divisions$ | async">
+          <p>{{ studiesByDivisions.division }}</p>
+          <mat-list-item *ngFor="let studyfield of studiesByDivisions.studies">
+            <mat-icon matListIcon>arrow_right</mat-icon>
+            <p matLine>{{ studyfield.name }} ({{ studyfield.mode }})</p>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
   </mat-card>
 </div>
 
