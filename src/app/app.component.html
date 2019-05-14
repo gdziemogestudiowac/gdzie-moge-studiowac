@@ -1,10 +1,32 @@
-<div style="text-align: center; width: 400px; height: 500px; margin: auto">
-  <iframe
-    width="400"
-    height="435"
-    src="https://zrzutka.pl/k5626a/widget/13"
-    frameborder="0"
-    scrolling="no"
-  ></iframe>
-  <h3>Copyright © 2019 Patryk Wertka</h3>
-</div>
+<mat-sidenav-container>
+  <mat-sidenav #sidenav role="navigation">
+    <iframe
+      width="400"
+      height="435"
+      src="https://zrzutka.pl/k5626a/widget/23"
+      frameborder="0"
+      scrolling="no"
+    ></iframe
+  ></mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <h1>gdziemogestudiowac.pl</h1>
+    </mat-toolbar>
+
+    <mat-card>
+      <router-outlet></router-outlet>
+    </mat-card>
+
+    <mat-card>
+      <small>
+        Portal w trakcie budowy. To nie jest jego finalna funkcjonalność i
+        wygląd.
+      </small>
+      <h6>Copyright © 2019 Patryk Wertka</h6>
+    </mat-card>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,37 @@
+<form
+  [formGroup]="collegeForm"
+  (ngSubmit)="onSubmitCollege()"
+  *ngIf="superpowersEnabled"
+>
+  <mat-form-field>
+    <input matInput placeholder="Nazwa uczelni..." formControlName="name" />
+  </mat-form-field>
+  |
+  <mat-form-field>
+    <input matInput placeholder="Typ uczelni..." formControlName="type" />
+  </mat-form-field>
+
+  <button mat-fab color="primary" type="submit" [disabled]="!collegeForm.valid">
+    +
+  </button>
+</form>
+
+<div class="horizontal-groups">
+  <mat-card *ngFor="let collegesGroup of collegesGroups$ | async">
+    <mat-card-header
+      ><h3>{{ collegesGroup.type }}</h3></mat-card-header
+    >
+    <mat-list dense>
+      <mat-list-item *ngFor="let college of collegesGroup.colleges">
+        {{ college.name }}
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+</div>
+
+<img
+  src="assets/janpatii.jpg"
+  *ngIf="superpowersEnabled"
+  style="width: 100%;
+height: auto;"
+/>
