@@ -1,5 +1,6 @@
 <mat-sidenav-container>
-  <mat-sidenav #sidenav role="navigation">
+  <mat-sidenav #sidenav role="navigation" (panleft)="sidenav.toggle()">
+    (machnij palcem by cofnąć)
     <iframe
       width="400"
       height="435"
@@ -7,10 +8,10 @@
       frameborder="0"
       scrolling="no"
     ></iframe>
-    <button (click)='logIn()'>Wiesz co robisz? Zaloguj sie</button>
+    <button (click)="logIn()">Wiesz co robisz? Zaloguj sie</button>
   </mat-sidenav>
 
-  <mat-sidenav-content>
+  <mat-sidenav-content (panright)="sidenav.open()">
     <mat-toolbar color="primary">
       <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>

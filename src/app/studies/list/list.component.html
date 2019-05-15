@@ -1,23 +1,28 @@
-<ng-container *ngFor='let college of colleges$ | async'>
-  <span><h4>{{ college.name }} ({{ college.type }})</h4></span>
-  <mat-card *ngFor='let division of college.divisions'>
-    <mat-card-subtitle>
-      {{ division.division }}
-    </mat-card-subtitle>
+<div (rotateend)="handleRotateEnd($event)">
+  <ng-container *ngFor="let college of colleges$ | async">
+    <span>
+      <h4>{{ college.name }} ({{ college.type }})</h4>
+    </span>
+    <mat-card *ngFor="let division of college.divisions">
+      <mat-card-subtitle>
+        {{ division.division }}
+      </mat-card-subtitle>
 
-    <mat-card-content>
-      <mat-list dense *ngFor='let studyfield of division.studies'>
-        <mat-list-item>
-          <mat-icon>arrow_right</mat-icon> {{ studyfield.name }} ({{ studyfield.mode }})
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
-</ng-container>
+      <mat-card-content>
+        <mat-list dense *ngFor="let studyfield of division.studies">
+          <mat-list-item>
+            <mat-icon>arrow_right</mat-icon>
+            {{ studyfield.name }} ({{ studyfield.mode }})
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
 
-<img
-  src="assets/janpatii.jpg"
-  *ngIf="superpowersEnabled"
-  style="width: 100%;
+  <img
+    src="assets/janpatii.jpg"
+    *ngIf="superpowersEnabled"
+    style="width: 100%;
 height: auto;"
-/>
+  />
+</div>
