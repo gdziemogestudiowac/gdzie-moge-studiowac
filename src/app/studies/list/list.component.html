@@ -1,4 +1,4 @@
-<div (rotateend)="handleRotateEnd($event)">
+<div (rotateend)="handleRotateEnd($event)" [style.touch-action]="'pan-y'">
   <ng-container *ngFor="let college of colleges$ | async">
     <span>
       <h4>{{ college.name }} ({{ college.type }})</h4>
