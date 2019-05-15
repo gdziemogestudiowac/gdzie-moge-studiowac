@@ -8,6 +8,12 @@ import * as _ from "lodash";
 interface College {
   name: string;
   type: string;
+  divisions: Division[];
+}
+
+interface Division {
+  division: string;
+  studies: StudyField[];
 }
 
 interface StudyField {
@@ -17,32 +23,8 @@ interface StudyField {
   mode: string;
 }
 
-function includeDocId(actions) {
-  return actions.map(a => {
-    const data = a.payload.doc.data();
-    const id = a.payload.doc.id;
-    return { id, ...data };
-  });
-}
-
-function includeStudiesByDivisions(db: AngularFirestore) {
-  return (col: Array<any>) => {
-    return col.map(doc => ({
-      ...doc,
-      divisions$: db
-        .collection(`college/${doc.id}/studyfields`)
-        .valueChanges()
-        .pipe(take(1))
-        .pipe(
-          map(colleges =>
-            _(colleges)
-              .groupBy((studyfield: StudyField) => studyfield.division)
-              .map((value, key) => ({ division: key, studies: value }))
-              .value()
-          )
-        )
-    }));
-  };
+interface Db {
+  colleges: College[];
 }
 
 @Component({
@@ -55,21 +37,11 @@ export class ListComponent {
   superpowerspass = atob("amFuIHBhdCBpaQ==");
   keybuffer = "";
 
-  colleges$ = this.db
-    .collection<College>("college")
-    .snapshotChanges()
-    .pipe(map(includeDocId))
-    .pipe(map(includeStudiesByDivisions(this.db)))
-    .pipe(share());
+  db$ = this.db
+    .doc<Db>("db/instance")
+    .valueChanges();
 
-  collegesGroups$ = this.colleges$.pipe(take(1)).pipe(
-    map(colleges =>
-      _(colleges)
-        .groupBy((college: College) => college.type)
-        .map((value, key) => ({ type: key, colleges: value }))
-        .value()
-    )
-  );
+  colleges$ = this.db$.pipe(map(db => db.colleges));
 
   collegeForm = this.fb.group({
     name: ["", Validators.required],
@@ -90,7 +62,7 @@ export class ListComponent {
   ) {}
 
   async onSubmitCollege() {
-    this.db
+    /*this.db
       .collection<College>("college")
       .add(this.collegeForm.value)
       .then(() => {
@@ -99,7 +71,7 @@ export class ListComponent {
   }
 
   async onSubmitStudyField() {
-    const colleges = await this.colleges$.pipe(take(1)).toPromise();
+    /*const colleges = await this.colleges$.pipe(take(1)).toPromise();
     const studyField: StudyField = this.studyFieldForm.value;
     const selectedCollege = colleges.find(
       college => college.name === studyField.college
@@ -117,7 +89,7 @@ export class ListComponent {
       .add(studyField)
       .then(() => {
         this.snackBar.open("Dodano kierunek", "ok", { duration: 2000 });
-      });
+      });*/
   }
 
   @HostListener("document:keypress", ["$event"])
