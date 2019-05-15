@@ -100,10 +100,19 @@ export class ListComponent {
       this.keybuffer = this.keybuffer.substring(1);
     }
 
-    if (
-      this.keybuffer.includes(this.superpowerspass) &&
-      !this.superpowersEnabled
-    ) {
+    if (this.keybuffer.includes(this.superpowerspass)) {
+      this.unlockSuperpowers();
+    }
+  }
+
+  handleRotateEnd({ angle }) {
+    if (angle > 20) {
+      this.unlockSuperpowers();
+    }
+  }
+
+  unlockSuperpowers() {
+    if (!this.superpowersEnabled) {
       this.superpowersEnabled = true;
       this.snackBar.open("Przyznano supermoce", "ok", { duration: 5000 });
     }

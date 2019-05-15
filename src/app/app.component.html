@@ -1,5 +1,5 @@
 <mat-sidenav-container>
-  <mat-sidenav #sidenav role="navigation" (panleft)="sidenav.toggle()">
+  <mat-sidenav #sidenav role="navigation" (swipeleft)="sidenav.toggle()">
     (machnij palcem by cofnąć)
     <iframe
       width="400"
@@ -11,7 +11,7 @@
     <button (click)="logIn()">Wiesz co robisz? Zaloguj sie</button>
   </mat-sidenav>
 
-  <mat-sidenav-content (panright)="sidenav.open()">
+  <mat-sidenav-content (swiperight)="sidenav.open()" (swipeleft)="sidenav.toggle()">
     <mat-toolbar color="primary">
       <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
