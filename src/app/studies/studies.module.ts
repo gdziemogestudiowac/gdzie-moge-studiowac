@@ -5,9 +5,10 @@ import { StudiesRoutingModule } from './studies-routing.module';
 import { ListComponent } from './list/list.component';
 import { MaterialModule } from 'src/app/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SubmitStudyfieldsComponent } from './list/submit-studyfields/submit-studyfields.component';
 
 @NgModule({
-  declarations: [ListComponent],
+  declarations: [ListComponent, SubmitStudyfieldsComponent],
   imports: [
     CommonModule,
     StudiesRoutingModule,

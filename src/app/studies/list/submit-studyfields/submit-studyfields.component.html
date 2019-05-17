@@ -1,0 +1,81 @@
+<mat-form-field class="full-width">
+  <input
+    type="text"
+    placeholder="Wybierz uczelnię"
+    matInput
+    [formControl]="collegeControl"
+    [matAutocomplete]="autoCollege"
+  />
+  <mat-autocomplete #autoCollege="matAutocomplete">
+    <mat-option
+      *ngFor="let option of filteredColleges$ | async"
+      [value]="option"
+    >
+      {{ option }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+
+<mat-form-field class="full-width">
+  <input
+    type="text"
+    placeholder="Wybierz (lub wpisz nowy) wydział"
+    matInput
+    [formControl]="divisionControl"
+    [matAutocomplete]="autoDivision"
+  />
+  <mat-autocomplete #autoDivision="matAutocomplete">
+    <mat-option
+      *ngFor="let division of (selectedCollege$ | async)?.divisions"
+      [value]="division.division"
+    >
+      {{ division.division }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+
+<p
+  *ngIf="isExistingDivisionSelected(selectedCollege$ | async); else newDivision"
+>
+  Wybrano istniejący wydział.
+</p>
+
+<ng-template #newDivision>
+  <p>Wpisano nieistniejący wydział (zostanie dodany)</p>
+</ng-template>
+
+<mat-form-field class="example-full-width">
+  <mat-label>Wybierz tryb</mat-label>
+  <mat-select #modeSelectInput>
+    <mat-option *ngFor="let mode of studyModes" [value]="mode">
+      {{ mode }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field class="full-width">
+  <mat-label>Wpisz kierunki</mat-label>
+  <textarea
+    matInput
+    cdkTextareaAutosize
+    #autosize="cdkTextareaAutosize"
+    cdkAutosizeMinRows="2"
+    cdkAutosizeMaxRows="6"
+    #studyfieldsInput
+  ></textarea>
+</mat-form-field>
+
+<button
+  mat-fab
+  color="primary"
+  (click)="
+    onSubmitStudyfields(
+      collegeControl?.value,
+      divisionControl?.value,
+      modeSelectInput?.value,
+      studyfieldsInput?.value
+    )
+  "
+>
+  +
+</button>

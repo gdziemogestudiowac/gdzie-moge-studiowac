@@ -4,9 +4,9 @@
 }
 
 .mat-list-item.mat-list-item-word-wrap {
-    height: initial !important;
-    .mat-line {
-      word-wrap: break-word !important; 
-      white-space: pre-wrap !important;
-    }
+  height: initial !important;
+  .mat-line {
+    word-wrap: break-word !important;
+    white-space: pre-wrap !important;
   }
+}

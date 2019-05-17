@@ -1,32 +1,16 @@
 import { Component, HostListener } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
-import { FormBuilder, Validators } from "@angular/forms";
 import { MatSnackBar } from "@angular/material";
-import { map, tap, last, take, first, share } from "rxjs/operators";
+import { take } from "rxjs/operators";
 import * as _ from "lodash";
+import { Observable } from "rxjs";
+import { Db } from "./types/db";
+import { College } from "./types/college";
+import { Division } from "./types/division";
+import { StudyField } from "./types/studyfield";
+import { StudyfieldsSubmitEvent } from "./submit-studyfields/studyfields-submit-event";
 
-interface College {
-  name: string;
-  type: string;
-  divisions: Division[];
-}
-
-interface Division {
-  division: string;
-  studies: StudyField[];
-}
-
-interface StudyField {
-  name: string;
-  college: string;
-  division: string;
-  mode: string;
-}
-
-interface Db {
-  colleges: College[];
-}
-
+// TODO: Extract smaller components
 @Component({
   selector: "app-list",
   templateUrl: "./list.component.html",
@@ -37,59 +21,78 @@ export class ListComponent {
   superpowerspass = atob("amFuIHBhdCBpaQ==");
   keybuffer = "";
 
-  db$ = this.db
-    .doc<Db>("db/instance")
-    .valueChanges();
+  db: Db;
 
-  colleges$ = this.db$.pipe(map(db => db.colleges));
-
-  collegeForm = this.fb.group({
-    name: ["", Validators.required],
-    type: ["", Validators.required]
-  });
-
-  studyFieldForm = this.fb.group({
-    name: ["", Validators.required],
-    college: ["", Validators.required],
-    division: ["", Validators.required],
-    mode: ["", Validators.required]
-  });
+  colleges: College[];
 
   constructor(
-    private db: AngularFirestore,
-    private fb: FormBuilder,
+    private afStore: AngularFirestore,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+    (async () => {
+      this.db = await afStore
+        .doc<Db>("db/instance")
+        .valueChanges()
+        .pipe(take(1))
+        .toPromise();
 
-  async onSubmitCollege() {
-    /*this.db
-      .collection<College>("college")
-      .add(this.collegeForm.value)
-      .then(() => {
-        this.snackBar.open("Dodano do listy", "ok", { duration: 2000 });
-      });
+      this.colleges = this.db.colleges;
+    })();
   }
 
-  async onSubmitStudyField() {
-    /*const colleges = await this.colleges$.pipe(take(1)).toPromise();
-    const studyField: StudyField = this.studyFieldForm.value;
-    const selectedCollege = colleges.find(
-      college => college.name === studyField.college
+  getCollegeByName(name: string): College | undefined {
+    const collegesNames = this.colleges.map(c => c.name);
+    const collegeIndex = collegesNames.indexOf(name);
+
+    return collegeIndex < 0 ? undefined : this.colleges[collegeIndex];
+  }
+
+  onSubmitStudyfields(event: StudyfieldsSubmitEvent) {
+    console.log(event);
+    const studyfields = event.studyfields.map(
+      (studyfieldName: string): StudyField => {
+        const sf: StudyField = {
+          college: event.college,
+          division: event.division,
+          mode: event.mode,
+          name: studyfieldName
+        };
+        return sf;
+      }
     );
 
+    const selectedCollege = this.getCollegeByName(event.college);
+
     if (!selectedCollege) {
-      this.snackBar.open("Nie znaleziono uczelni", "szkoda :(", {
+      return this.snackBar.open("Nie znaleziono uczelni", "szkoda :(", {
         duration: 4000
       });
-      return;
     }
 
-    this.db
-      .collection(`college/${selectedCollege.id}/studyfields`)
-      .add(studyField)
-      .then(() => {
-        this.snackBar.open("Dodano kierunek", "ok", { duration: 2000 });
-      });*/
+    const selectedDivision = selectedCollege.divisions.find(
+      division => division.division === event.division
+    );
+
+    if (selectedDivision) {
+      selectedDivision.studies.push(...studyfields);
+    } else {
+      const division: Division = {
+        division: event.division,
+        studies: studyfields
+      };
+      selectedCollege.divisions.push(division);
+    }
+
+    this.saveDb();
+  }
+
+  async saveDb() {
+    try {
+      await this.afStore.doc("db/instance").set(this.db);
+      this.snackBar.open("Dodano!", "ok", { duration: 2500 });
+    } catch {
+      this.snackBar.open("Brak uprawnień?", "kurcze", { duration: 3500 });
+    }
   }
 
   @HostListener("document:keypress", ["$event"])

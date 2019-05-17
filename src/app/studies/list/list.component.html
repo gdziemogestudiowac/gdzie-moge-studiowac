@@ -1,5 +1,18 @@
+<mat-expansion-panel *ngIf="superpowersEnabled">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Dodaj kierunki
+    </mat-panel-title>
+    <mat-panel-description>
+      Wybierz uczelnie, wydział (lub go dodaj) i dodaj kierunki
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <app-submit-studyfields [colleges]="colleges" (submit)='onSubmitStudyfields($event)'></app-submit-studyfields>
+</mat-expansion-panel>
+
 <div (rotateend)="handleRotateEnd($event)" [style.touch-action]="'pan-y'">
-  <ng-container *ngFor="let college of colleges$ | async">
+  <div *ngFor="let college of colleges">
     <span>
       <h4>{{ college.name }} ({{ college.type }})</h4>
     </span>
@@ -17,12 +30,14 @@
         </mat-list>
       </mat-card-content>
     </mat-card>
-  </ng-container>
+  </div>
 
   <img
     src="assets/janpatii.jpg"
     *ngIf="superpowersEnabled"
-    style="width: 100%;
-height: auto;"
+    style="
+        width: 100%;
+        height: auto;
+      "
   />
 </div>
