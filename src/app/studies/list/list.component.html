@@ -14,15 +14,20 @@
   ></app-submit-studyfields>
 </mat-expansion-panel>
 
-<button
-  mat-button
-  *ngIf="superpowersEnabled"
-  (click)="sortCollegesByDivisionsLen()"
->
-  Sortuj po ilości wydziałów
-</button>
+<div *ngIf="superpowersEnabled">
+  <button mat-button (click)="sortCollegesByDivisionsLen()">
+    Sortuj po ilości wydziałów
+  </button>
+  <button mat-button (click)="showColleges = !showColleges">
+    Przełącz pokazywanie uczelni
+  </button>
+</div>
 
-<div (rotateend)="handleRotateEnd($event)" [style.touch-action]="'pan-y'">
+<div
+  (rotateend)="handleRotateEnd($event)"
+  [style.touch-action]="'pan-y'"
+  *ngIf="showColleges"
+>
   <div *ngFor="let college of colleges">
     <span>
       <h4>{{ college.name }} ({{ college.type }})</h4>

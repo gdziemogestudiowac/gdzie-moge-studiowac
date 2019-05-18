@@ -18,6 +18,7 @@ import { StudyfieldsSubmitEvent } from "./submit-studyfields/studyfields-submit-
 })
 export class ListComponent {
   superpowersEnabled = false;
+  showColleges = true;
   superpowerspass = atob("amFuIHBhdCBpaQ==");
   keybuffer = "";
 
