@@ -90,13 +90,18 @@ export class ListComponent {
     this.saveDb();
   }
 
-  async saveDb() {
+  async saveDb(msg = "Zapisano!") {
     try {
       await this.afStore.doc("db/instance").set(this.db);
-      this.snackBar.open("Dodano!", "ok", { duration: 2500 });
+      this.snackBar.open(msg, "ok", { duration: 2500 });
     } catch {
       this.snackBar.open("Brak uprawnień?", "kurcze", { duration: 3500 });
     }
+  }
+
+  deleteStudyfield(division: Division, studyfield: StudyField) {
+    division.studies.splice(division.studies.indexOf(studyfield), 1);
+    this.saveDb("Usunięto kierunek!");
   }
 
   @HostListener("document:keypress", ["$event"])

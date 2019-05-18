@@ -37,6 +37,14 @@
           <mat-list-item>
             <mat-icon>arrow_right</mat-icon>
             {{ studyfield.name }} ({{ studyfield.mode }})
+            <button
+              mat-icon-button
+              color="warn"
+              *ngIf="superpowersEnabled"
+              (click)="deleteStudyfield(division, studyfield)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
           </mat-list-item>
         </mat-list>
       </mat-card-content>
