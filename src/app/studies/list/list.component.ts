@@ -107,6 +107,13 @@ export class ListComponent {
     }
   }
 
+  deleteDivision(college: College, division: Division) {
+    if (confirm(`Na pewno usunąć "${division.division}"?`)) {
+      college.divisions.splice(college.divisions.indexOf(division), 1);
+      this.saveDb("Usunięto wydział!");
+    }
+  }
+
   @HostListener("document:keypress", ["$event"])
   handleKeyboardEvent(event: KeyboardEvent) {
     this.keybuffer += event.key;

@@ -35,6 +35,14 @@
     <mat-card *ngFor="let division of college.divisions">
       <mat-card-subtitle>
         {{ division.division }}
+        <button
+          mat-icon-button
+          color="warn"
+          *ngIf="superpowersEnabled"
+          (click)="deleteDivision(college, division)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
       </mat-card-subtitle>
 
       <mat-card-content>
