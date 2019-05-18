@@ -8,8 +8,19 @@
     </mat-panel-description>
   </mat-expansion-panel-header>
 
-  <app-submit-studyfields [colleges]="colleges" (submit)='onSubmitStudyfields($event)'></app-submit-studyfields>
+  <app-submit-studyfields
+    [colleges]="colleges"
+    (submit)="onSubmitStudyfields($event)"
+  ></app-submit-studyfields>
 </mat-expansion-panel>
+
+<button
+  mat-button
+  *ngIf="superpowersEnabled"
+  (click)="sortCollegesByDivisionsLen()"
+>
+  Sortuj po ilości wydziałów
+</button>
 
 <div (rotateend)="handleRotateEnd($event)" [style.touch-action]="'pan-y'">
   <div *ngFor="let college of colleges">

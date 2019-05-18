@@ -40,6 +40,10 @@ export class ListComponent {
     })();
   }
 
+  sortCollegesByDivisionsLen() {
+    this.db.colleges.sort((a, b) => a.divisions.length - b.divisions.length);
+  }
+
   getCollegeByName(name: string): College | undefined {
     const collegesNames = this.colleges.map(c => c.name);
     const collegeIndex = collegesNames.indexOf(name);
