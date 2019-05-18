@@ -23,6 +23,11 @@
   </button>
 </div>
 
+<p *ngIf="colleges">
+  Liczba uczelni: {{ colleges?.length }}, liczba kierunków:
+  {{ getOverallStudiesCount() }}
+</p>
+
 <div
   (rotateend)="handleRotateEnd($event)"
   [style.touch-action]="'pan-y'"
@@ -30,11 +35,14 @@
 >
   <div *ngFor="let college of colleges">
     <span>
-      <h4>{{ college.name }} ({{ college.type }})</h4>
+      <h4>
+        {{ college.name }} ({{ college.type }}) (l. wydziałów:
+        {{ college.divisions.length }})
+      </h4>
     </span>
     <mat-card *ngFor="let division of college.divisions">
       <mat-card-subtitle>
-        {{ division.division }}
+        {{ division.division }} (l. kierunków: {{ division.studies.length }})
         <button
           mat-icon-button
           color="warn"

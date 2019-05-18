@@ -52,6 +52,18 @@ export class ListComponent {
     return collegeIndex < 0 ? undefined : this.colleges[collegeIndex];
   }
 
+  getOverallStudiesCount() {
+    const sum = (a, b) => a + b;
+
+    return this.colleges
+      .map(
+        college => college.divisions.map(
+          division => division.studies.length
+        )
+      )
+      .reduce((acc, studiesCounts) => acc + studiesCounts.reduce(sum, 0), 0);
+  }
+
   onSubmitStudyfields(event: StudyfieldsSubmitEvent) {
     console.log(event);
     const studyfields = event.studyfields.map(
