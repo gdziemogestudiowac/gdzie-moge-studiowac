@@ -100,8 +100,10 @@ export class ListComponent {
   }
 
   deleteStudyfield(division: Division, studyfield: StudyField) {
-    division.studies.splice(division.studies.indexOf(studyfield), 1);
-    this.saveDb("Usunięto kierunek!");
+    if (confirm(`Na pewno usunąć "${studyfield.name} (${studyfield.mode})"?`)) {
+      division.studies.splice(division.studies.indexOf(studyfield), 1);
+      this.saveDb("Usunięto kierunek!");
+    }
   }
 
   @HostListener("document:keypress", ["$event"])
