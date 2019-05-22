@@ -33,39 +33,37 @@
   [style.touch-action]="'pan-y'"
   *ngIf="showColleges"
 >
-  <div *ngFor="let college of colleges">
-    <span>
-      <h4>
-        {{ college.name }} ({{ college.type }}) (l. wydziałów:
-        {{ college.divisions.length }})
-      </h4>
-    </span>
-    <mat-card *ngFor="let division of college.divisions">
-      <mat-card-subtitle>
-        {{ division.division }} (l. kierunków: {{ division.studies.length }})
-        <button
-          mat-icon-button
-          color="warn"
-          *ngIf="superpowersEnabled"
-          (click)="deleteDivision(college, division)"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
-      </mat-card-subtitle>
+  <app-autocomplete
+    *ngIf="colleges"
+    [options]="getCollegeNames()"
+    (select)="onCollegeSelected($event)"
+  ></app-autocomplete>
+
+  <div *ngIf="selectedCollege">
+    <mat-card *ngFor="let division of selectedCollege.divisions">
+      <mat-card-title>{{ division.division }}</mat-card-title>
 
       <mat-card-content>
-        <mat-list dense *ngFor="let studyfield of division.studies">
-          <mat-list-item>
-            <mat-icon>arrow_right</mat-icon>
+        <mat-list>
+          <mat-list-item *ngFor="let studyfield of division.studies">
+            <mat-icon mat-list-icon>arrow_right</mat-icon>
             {{ studyfield.name }} ({{ studyfield.mode }})
-            <button
-              mat-icon-button
-              color="warn"
-              *ngIf="superpowersEnabled"
-              (click)="deleteStudyfield(division, studyfield)"
-            >
-              <mat-icon>delete</mat-icon>
-            </button>
+
+            <ng-container *ngIf="superpowersEnabled">
+              <button
+                mat-flat-button
+                color="primary"
+                (click)="openAddThresholdDialog(studyfield)"
+              >
+                Dodaj próg
+              </button>
+            </ng-container>
+
+            <mat-chip-list *ngIf='studyfield.thresholds'>
+              <mat-chip *ngFor='let threshold of studyfield.thresholds'>
+                {{ threshold.year }}/{{ threshold.value }}/{{ threshold.formula }})
+              </mat-chip>
+            </mat-chip-list>
           </mat-list-item>
         </mat-list>
       </mat-card-content>
@@ -76,8 +74,8 @@
     src="assets/janpatii.jpg"
     *ngIf="superpowersEnabled"
     style="
-        width: 100%;
-        height: auto;
-      "
+            width: 100%;
+            height: auto;
+          "
   />
 </div>

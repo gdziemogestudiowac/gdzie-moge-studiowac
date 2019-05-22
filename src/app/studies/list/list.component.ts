@@ -1,6 +1,7 @@
+import { AddThresholdDialogComponent } from "./dialogs/add-threshold-dialog/add-threshold-dialog.component";
 import { Component, HostListener } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
-import { MatSnackBar } from "@angular/material";
+import { MatSnackBar, MatDialog } from "@angular/material";
 import { take } from "rxjs/operators";
 import * as _ from "lodash";
 import { Observable } from "rxjs";
@@ -11,6 +12,7 @@ import { StudyField } from "./types/studyfield";
 import { StudyfieldsSubmitEvent } from "./submit-studyfields/studyfields-submit-event";
 
 // TODO: Extract smaller components
+// TODO: Extract DB service
 @Component({
   selector: "app-list",
   templateUrl: "./list.component.html",
@@ -25,10 +27,12 @@ export class ListComponent {
   db: Db;
 
   colleges: College[];
+  selectedCollege = null as College;
 
   constructor(
     private afStore: AngularFirestore,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {
     (async () => {
       this.db = await afStore
@@ -39,6 +43,32 @@ export class ListComponent {
 
       this.colleges = this.db.colleges;
     })();
+  }
+
+  openAddThresholdDialog(studyfield) {
+    this.dialog
+      .open(AddThresholdDialogComponent, {
+        data: studyfield
+      })
+      .afterClosed()
+      .subscribe(data => {
+        if (data) {
+          studyfield.thresholds = [
+            ...(studyfield.thresholds || []),
+            data
+          ];
+          this.saveDb("Dodano próg!");
+        }
+      });
+  }
+
+  onCollegeSelected(collegeName: string) {
+    this.selectedCollege = this.getCollegeByName(collegeName);
+    console.log(this.selectedCollege);
+  }
+
+  getCollegeNames() {
+    return this.colleges.map(college => college.name);
   }
 
   sortCollegesByDivisionsLen() {
@@ -56,10 +86,8 @@ export class ListComponent {
     const sum = (a, b) => a + b;
 
     return this.colleges
-      .map(
-        college => college.divisions.map(
-          division => division.studies.length
-        )
+      .map(college =>
+        college.divisions.map(division => division.studies.length)
       )
       .reduce((acc, studiesCounts) => acc + studiesCounts.reduce(sum, 0), 0);
   }
