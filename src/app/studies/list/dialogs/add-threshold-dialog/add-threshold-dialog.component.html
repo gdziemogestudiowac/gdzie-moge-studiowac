@@ -5,21 +5,23 @@
 
 <div mat-dialog-content>
   <p>Rocznik:</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="threshold.year">
+  <mat-form-field class="full-width">
+    <input matInput [(ngModel)]="threshold.year" />
   </mat-form-field>
 
   <p>Wartość punktowa:</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="threshold.value">
+  <mat-form-field class="full-width">
+    <input matInput [(ngModel)]="threshold.value" />
   </mat-form-field>
 
   <p>Wzór na punkty (np RB+RM*0.7):</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="threshold.formula">
+  <mat-form-field class="full-width">
+    <input matInput [(ngModel)]="threshold.formula" />
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="dialogRef.close()">Anuluj</button>
-  <button mat-button [mat-dialog-close]="threshold" cdkFocusInitial>Dodaj</button>
+  <button mat-button [mat-dialog-close]="threshold" cdkFocusInitial>
+    Dodaj
+  </button>
 </div>
