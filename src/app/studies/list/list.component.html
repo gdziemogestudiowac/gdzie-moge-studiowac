@@ -57,11 +57,22 @@
               >
                 Dodaj próg
               </button>
+
+              <button
+                mat-icon-button
+                color="warn"
+                *ngIf="superpowersEnabled"
+                (click)="deleteStudyfield(division, studyfield)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
             </ng-container>
 
-            <mat-chip-list *ngIf='studyfield.thresholds'>
-              <mat-chip *ngFor='let threshold of studyfield.thresholds'>
-                {{ threshold.year }}/{{ threshold.value }}/{{ threshold.formula }})
+            <mat-chip-list *ngIf="studyfield.thresholds">
+              <mat-chip *ngFor="let threshold of studyfield.thresholds">
+                {{ threshold.year }}/{{ threshold.value }}/{{
+                  threshold.formula
+                }})
               </mat-chip>
             </mat-chip-list>
           </mat-list-item>
