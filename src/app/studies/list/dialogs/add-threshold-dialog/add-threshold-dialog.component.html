@@ -15,7 +15,13 @@
   </mat-form-field>
 
   <p>Wzór na punkty (np RB+RM*0.7):</p>
-  <button mat-button *ngFor='let option of exams | keyvalue' (click)='addToFormula(option.value)'>{{ option.key }}</button>
+  <button
+    mat-button
+    *ngFor="let option of exams | keyvalue"
+    (click)="addToFormula(option.value)"
+  >
+    {{ option.key }}
+  </button>
   <mat-form-field class="full-width">
     <input matInput [(ngModel)]="threshold.formula" />
   </mat-form-field>

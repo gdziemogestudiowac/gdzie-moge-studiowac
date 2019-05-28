@@ -55,7 +55,7 @@
                 color="primary"
                 (click)="openAddThresholdDialog(studyfield)"
               >
-                Dodaj próg
+                +próg
               </button>
 
               <button
@@ -68,13 +68,13 @@
               </button>
             </ng-container>
 
-            <mat-chip-list *ngIf="studyfield.thresholds">
-              <mat-chip *ngFor="let threshold of studyfield.thresholds">
+            <div *ngIf="studyfield.thresholds">
+              <small *ngFor="let threshold of studyfield.thresholds" class="rounded">
                 {{ threshold.year }}/{{ threshold.value }}/{{
                   threshold.formula
-                }})
-              </mat-chip>
-            </mat-chip-list>
+                }}
+              </small>
+            </div>
           </mat-list-item>
         </mat-list>
       </mat-card-content>
